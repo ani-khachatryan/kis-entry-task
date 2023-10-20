@@ -1,6 +1,7 @@
 # kis-entry-task
 
-Given 2 directories, this tool compares the files they contain. 
+Given 2 directories, this tool compares the files they contain, counting similarity ratio for each pair. 
+My solution uses hashing for identical pairs, and splitting into chunks + lcs for counting the similarity percentage.
 
 Use
 ```
