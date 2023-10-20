@@ -3,6 +3,7 @@ import hashlib
 import difflib
 from statistics import mean
 
+
 def calculate_hash(file_path):
     hasher = hashlib.md5()
     with open(file_path, 'rb') as f:
@@ -12,6 +13,22 @@ def calculate_hash(file_path):
                 break
             hasher.update(data)
     return hasher.hexdigest()
+
+
+def longest_common_subsequence_length(str1, str2):
+    m, n = len(str1), len(str2)
+
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if str1[i - 1] == str2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+    return dp[m][n]
+
 
 def compare_large_binary_files(file1_path, file2_path):
     buffer_size = 8192
@@ -26,8 +43,8 @@ def compare_large_binary_files(file1_path, file2_path):
 
             if data1 != data2:
                 # If the chunks are not identical, calculate the similarity ratio
-                differences = sum(1 for b1, b2 in zip(data1, data2) if b1 != b2)
-                similarity = 1.0 - (differences / len(data1))
+                lcs_length = longest_common_subsequence_length(data1, data2)
+                similarity = lcs_length / max(len(data1), len(data2))
                 ratios.append(similarity)
             else:
                 ratios.append(1.0)
